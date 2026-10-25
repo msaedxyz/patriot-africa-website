@@ -35,7 +35,7 @@ OFFICES = [
      "lines": ["Patriot Transport & Trading Limited", "82764 Off Trade Fair Road", "Ndola", "Republic of Zambia"],
      "street": "82764 Off Trade Fair Road", "city": "Ndola", "country": "ZM"},
     {"region": "Middle East", "label": "Dubai office", "title": "Dubai, UAE",
-     "lines": ["Patriot Transport & Trading Limited", "Business Centre, Floor 3", "Building A3", "Business Park, Dubai South", "Dubai, UAE"],
+     "lines": ["Patriot Transport & Trading Limited", "Business Centre", "Floor 3, Building A3", "Business Park", "Dubai", "United Arab Emirates"],
      "street": "Business Centre, Floor 3, Building A3, Business Park, Dubai South", "city": "Dubai", "country": "AE"},
 ]
 COUNTRIES = ["Zambia", "Democratic Republic of the Congo", "Republic of the Congo", "Tanzania", "Malawi",
@@ -423,6 +423,13 @@ def faq_html(faqs):
 # ---------------------------------------------------------------- document assembly
 FONTS = "https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;400;600;700&display=swap"
 
+def version(name):
+    """A short content hash added to asset links, so browsers fetch new files after every change."""
+    if ARTIFACT:
+        return ""
+    import hashlib
+    return "?v=" + hashlib.sha1(open(os.path.join(SRC, name), "rb").read()).hexdigest()[:10]
+
 def document(page, title, description, body, ld=None, body_class="", og_image="hero", noindex=False):
     ld = ld or []
     is_index = ARTIFACT and page == "home"
@@ -453,15 +460,15 @@ def document(page, title, description, body, ld=None, body_class="", og_image="h
     if not LOCAL:
         head.append('<link rel="preconnect" href="https://cdn.prod.website-files.com" crossorigin>')
     head.append('<link rel="stylesheet" href="%s">' % FONTS)
-    head.append('<link rel="stylesheet" href="%s">' % asset("assets/styles.css"))
+    head.append('<link rel="stylesheet" href="%s%s">' % (asset("assets/styles.css"), version("styles.css")))
     if CONFIG["ga4"] and not ARTIFACT:
         head.append('<script async src="https://www.googletagmanager.com/gtag/js?id=%s"></script>' % CONFIG["ga4"])
         head.append("<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','%s');</script>" % CONFIG["ga4"])
     for block in ld:
         head.append('<script type="application/ld+json">%s</script>' % json.dumps(block, ensure_ascii=False, separators=(",", ":")))
 
-    content = "%s\n<main id=\"main\">%s</main>\n%s\n%s\n<script src=\"%s\" defer></script>" % (
-        header(page), body, footer(), mobile_cta() if page not in ("quote",) else "", asset("assets/site.js"))
+    content = "%s\n<main id=\"main\">%s</main>\n%s\n%s\n<script src=\"%s%s\" defer></script>" % (
+        header(page), body, footer(), mobile_cta() if page not in ("quote",) else "", asset("assets/site.js"), version("site.js"))
 
     if is_index:
         # the claude.ai preview wraps this file in its own document skeleton
