@@ -51,7 +51,7 @@ Cloudflare Pages serves `services.html` at `/services`, shows `404.html` for mis
 
 ## Confirm these facts before launch
 
-- 20+ years, 150+ trucks and trailers, 10 countries, 7 industries.
+- 20+ years, 250+ trucks and trailers, 10 countries, 7 industries.
 - Satellite tracking, 24/7 customer service and round the clock security.
 - The corridors and border posts on the Routes and Lobito Corridor pages.
 - Mozambique (Beira corridor), which the current Terms page does not list.

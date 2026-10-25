@@ -20,7 +20,7 @@ OUT = os.path.join(ROOT, "artifact" if ARTIFACT else "site")
 CONFIG = {
     "base_url": "https://www.patriotafrica.com",
     "name": "Patriot Africa",
-    "email": "info@patriotafrica.com",
+    "email": "hello@patriotafrica.com",
     "quote_email": "quotes@patriotafrica.com",  # the quote form sends requests here
     "phone": "",            # display form, e.g. "+260 21 2xx xxxx"
     "whatsapp": "",         # digits only with country code, e.g. "260971234567"
@@ -31,10 +31,12 @@ CONFIG = {
     "ga4": "",              # e.g. "G-XXXXXXX"; empty = no analytics script
 }
 OFFICES = [
-    {"region": "Africa", "label": "Head office", "lines": ["5216 Kabwe Road", "Industrial Area", "Ndola, Zambia"],
-     "street": "5216 Kabwe Road, Industrial Area", "city": "Ndola", "country": "ZM"},
-    {"region": "Europe", "label": "UK office", "lines": ["85 Great Portland Street", "First Floor", "London W1W 7LT", "United Kingdom"],
-     "street": "85 Great Portland Street, First Floor", "city": "London", "postcode": "W1W 7LT", "country": "GB"},
+    {"region": "Africa", "label": "Head office", "title": "Ndola, Zambia",
+     "lines": ["Patriot Transport & Trading Limited", "82764 Off Trade Fair Road", "Ndola", "Republic of Zambia"],
+     "street": "82764 Off Trade Fair Road", "city": "Ndola", "country": "ZM"},
+    {"region": "Middle East", "label": "Dubai office", "title": "Dubai, UAE",
+     "lines": ["Patriot Transport & Trading Limited", "Business Centre, Floor 3, Building A3", "Business Park, Dubai South", "Dubai, UAE"],
+     "street": "Business Centre, Floor 3, Building A3, Business Park, Dubai South", "city": "Dubai", "country": "AE"},
 ]
 COUNTRIES = ["Zambia", "Democratic Republic of the Congo", "Republic of the Congo", "Tanzania", "Malawi",
              "Zimbabwe", "Mozambique", "Namibia", "Angola", "South Africa"]
@@ -82,7 +84,10 @@ IMAGES = {
     "p-steinweg": ("6709f4144003f28ffcbdf8b4_brand-logo-06", "svg", 289, 56, []),
     "p-nucleus":  ("670cc89b772ad7e404f1a803_brand-logo-07", "jpg", 201, 112, []),
     "p-msc":      ("670cc8ab0ffec39158964406_brand-logo-08", "png", 127, 112, []),
+    "p-fields":   ("fields-energy-logo", "png", 360, 59, []),
 }
+STATIC_IMG = os.path.join(SRC, "img-static")
+STATIC_KEYS = {"p-fields"}
 LOCAL_IMG = os.path.join(SRC, "img")
 LOCAL_MANIFEST = os.path.join(LOCAL_IMG, "manifest.json")
 LOCAL = json.load(open(LOCAL_MANIFEST)) if os.path.exists(LOCAL_MANIFEST) else {}
@@ -90,6 +95,8 @@ LOCAL = json.load(open(LOCAL_MANIFEST)) if os.path.exists(LOCAL_MANIFEST) else {
 def img_src(key):
     """Return (src, srcset) for an image key."""
     stem, ext, w, h, variants = IMAGES[key]
+    if key in STATIC_KEYS:
+        return asset("img/%s.%s" % (stem, ext)), ""
     if key in LOCAL:
         files = LOCAL[key]  # list of [width, filename], ascending
         srcset = ", ".join("%s %dw" % (asset("img/" + f), fw) for fw, f in files)
@@ -472,9 +479,12 @@ def build():
     os.makedirs(os.path.join(OUT, "assets"))
     shutil.copy(os.path.join(SRC, "styles.css"), os.path.join(OUT, "assets", "styles.css"))
     shutil.copy(os.path.join(SRC, "site.js"), os.path.join(OUT, "assets", "site.js"))
+    os.makedirs(os.path.join(OUT, "img"), exist_ok=True)
+    if os.path.isdir(STATIC_IMG):
+        for f in os.listdir(STATIC_IMG):
+            shutil.copy(os.path.join(STATIC_IMG, f), os.path.join(OUT, "img", f))
     if LOCAL:
         dst = os.path.join(OUT, "img")
-        os.makedirs(dst)
         for key, files in LOCAL.items():
             for _, f in files:
                 shutil.copy(os.path.join(LOCAL_IMG, f), os.path.join(dst, f))

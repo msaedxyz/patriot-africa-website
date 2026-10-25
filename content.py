@@ -64,7 +64,7 @@ WHY = [
 
 PARTNERS = [("p-reload", "Reload Logistics"), ("p-steinweg", "C. Steinweg Group"), ("p-nucleus", "Nucleus Mining Logistics"),
             ("p-msc", "MSC"), ("p-agl", "AGL Africa Global Logistics"), ("p-hass", "HASS"), ("p-etg", "ETG Curechem"),
-            ("p-polytra", "Polytra")]
+            ("p-polytra", "Polytra"), ("p-fields", "Fields Energy")]
 
 def pills(items, cls="pill"):
     return "".join('<span class="%s">%s</span>' % (cls, escape(i)) for i in items)
@@ -72,7 +72,7 @@ def pills(items, cls="pill"):
 def stats_html():
     return """<div class="hero__proof" role="list">
   <div class="proof" role="listitem"><b>20<span>+</span></b><small>Years on the road</small></div>
-  <div class="proof" role="listitem"><b>150<span>+</span></b><small>Trucks and trailers</small></div>
+  <div class="proof" role="listitem"><b>250<span>+</span></b><small>Trucks and trailers</small></div>
   <div class="proof" role="listitem"><b>10</b><small>Countries served</small></div>
   <div class="proof" role="listitem"><b>7</b><small>Key industries</small></div>
 </div>"""
@@ -168,7 +168,7 @@ def home():
       <p>Our approach rests on long relationships. We plan each load with you, keep you informed on the road, and stay invested in the growth of the businesses we serve.</p>
       <ul class="facts">
         <li><b>Ndola, Zambia</b><span>Head office and depot</span></li>
-        <li><b>London, UK</b><span>Commercial office</span></li>
+        <li><b>Dubai, UAE</b><span>Regional office</span></li>
         <li><b>Full and part loads</b><span>FTL and LTL</span></li>
         <li><b>Bulk, liquid, general</b><span>and temperature controlled</span></li>
       </ul>
@@ -342,7 +342,7 @@ def fleet():
     rows = "".join('<tr><th scope="row">%s</th><td><span class="pill%s">%s</span></td><td>%s</td><td>%s</td></tr>'
                    % (n, " pill--spec" if c == "Specialised" else "", c, b, t) for n, c, b, t in FLEET_TABLE)
     body = page_head("A fleet built for every cargo",
-                     "More than 150 trucks and trailers, from flatbeds and interlinks to tankers and refrigerated units. Every vehicle carries satellite tracking.",
+                     "More than 250 trucks and trailers, from flatbeds and interlinks to tankers and refrigerated units. Every vehicle carries satellite tracking.",
                      "Fleet", [(None, "Fleet")]) + """
 <section class="section section--dust">
   <div class="wrap">
@@ -374,7 +374,7 @@ def fleet():
 </section>
 %s""" % (fleet_tabs(), rows, loads_html(), cta_band("Not sure which truck you need?", "Describe the cargo and the route. We will choose the right vehicle and send a detailed quote within one business day."))
     return document("fleet", "Our Fleet: Flatbed, Interlink, Tanker and Refrigerated Trucks | Patriot Africa",
-                    "More than 150 trucks and trailers: flatbed, interlink, box, curtain side, rigid, container, tanker, refrigerated and side loader. Satellite tracked across Southern Africa.",
+                    "More than 250 trucks and trailers: flatbed, interlink, box, curtain side, rigid, container, tanker, refrigerated and side loader. Satellite tracked across Southern Africa.",
                     body, ld=[breadcrumb_ld([("fleet", "Fleet")])])
 
 # ---------------------------------------------------------------- coverage
@@ -521,7 +521,7 @@ def industries():
 # ---------------------------------------------------------------- about
 def about():
     offices = "".join('<div class="box"><h3>%s</h3><address style="font-style:normal;display:grid;gap:.15rem"><b style="font-family:var(--f-display);font-stretch:112%%;font-size:1.1rem">%s</b>%s</address><p><a class="link-arrow" href="mailto:%s">%s</a></p></div>'
-                      % (o["label"], o["lines"][-1] if o["country"] == "ZM" else "London", "".join("<span>%s</span>" % l for l in o["lines"]), CONFIG["email"], CONFIG["email"]) for o in OFFICES)
+                      % (o["label"], o["title"], "".join("<span>%s</span>" % l for l in o["lines"]), CONFIG["email"], CONFIG["email"]) for o in OFFICES)
     values = [("Relationships", "We build long partnerships. Many of our customers have moved cargo with us for years, and we plan each load with them."),
               ("Safety", "Safe drivers, maintained vehicles and secure cargo come before speed on every route."),
               ("Reliability", "We commit to a delivery time and we tell you early if anything on the road changes it.")]
@@ -561,7 +561,7 @@ def about():
          "".join('<div class="ind"><h3>%s</h3><p>%s</p></div>' % v for v in values),
          partners_html(), offices, cta_band())
     return document("about", "About Patriot Africa: Road Freight Specialists in Ndola, Zambia",
-                    "More than twenty years of road freight across Southern Africa. Patriot Africa is based in Ndola, Zambia, with an office in London.",
+                    "More than twenty years of road freight across Southern Africa. Patriot Africa is based in Ndola, Zambia, with an office in Dubai.",
                     body, ld=[breadcrumb_ld([("about", "About")])] + org_ld(), og_image="mountain")
 
 # ---------------------------------------------------------------- quote
@@ -688,7 +688,7 @@ def privacy():
 <p>This website does not use advertising cookies. If we add analytics, we will update this policy and ask for your consent where the law requires it.</p>
 <h2>Contact us</h2>
 <p>If you have questions about this policy or how we handle your personal data, or if you want to use your rights under data protection law, contact us:</p>
-<ul><li>Email: <a href="mailto:%s">%s</a></li><li>Post: 85 Great Portland Street, First Floor, London W1W 7LT, United Kingdom</li></ul>
+<ul><li>Email: <a href="mailto:%s">%s</a></li><li>Post: Patriot Transport &amp; Trading Limited, 82764 Off Trade Fair Road, Ndola, Republic of Zambia</li></ul>
 </div></div></section>""" % (CONFIG["email"], CONFIG["email"])
     return document("privacy", "Privacy Policy | Patriot Africa", "How Patriot Africa collects, uses and protects personal data submitted through this website.",
                     body, ld=[breadcrumb_ld([("privacy", "Privacy policy")])])
@@ -719,7 +719,7 @@ def terms():
 <h2>9. Governing law</h2>
 <p>The laws of Zambia govern these Terms, without regard to conflict of law principles. You agree to the exclusive jurisdiction of the courts of Zambia for any dispute.</p>
 <h2>Contact us</h2>
-<ul><li>Email: <a href="mailto:%s">%s</a></li><li>Post: 85 Great Portland Street, First Floor, London W1W 7LT, United Kingdom</li></ul>
+<ul><li>Email: <a href="mailto:%s">%s</a></li><li>Post: Patriot Transport &amp; Trading Limited, 82764 Off Trade Fair Road, Ndola, Republic of Zambia</li></ul>
 </div></div></section>""" % (CONFIG["email"], CONFIG["email"])
     return document("terms", "Terms and Conditions | Patriot Africa", "The terms and conditions that govern use of the Patriot Africa website.",
                     body, ld=[breadcrumb_ld([("terms", "Terms and conditions")])])
