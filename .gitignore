@@ -1,0 +1,7 @@
+artifact/
+__pycache__/
+*.pyc
+src/img-raw/
+.DS_Store
+*.zip
+dist/
