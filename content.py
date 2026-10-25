@@ -79,9 +79,10 @@ def stats_html():
 
 def partners_html():
     items = "".join('<li>%s</li>' % img(k, name, width=None) for k, name in PARTNERS)
+    copy = "".join('<li aria-hidden="true">%s</li>' % img(k, "", width=None) for k, name in PARTNERS)
     return """<section class="partners" aria-label="Partners">
-  <div class="wrap partners__inner"><p class="mono">Partners we work with</p><ul>%s</ul></div>
-</section>""" % items
+  <div class="wrap partners__inner"><p class="mono">Partners we work with</p><div class="partners__viewport"><ul>%s%s</ul></div></div>
+</section>""" % (items, copy)
 
 def wa_button(cls="btn--light", label="WhatsApp", cta="hero-wa"):
     if not CONFIG["whatsapp"]:

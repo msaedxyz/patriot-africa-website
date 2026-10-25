@@ -35,7 +35,7 @@ OFFICES = [
      "lines": ["Patriot Transport & Trading Limited", "82764 Off Trade Fair Road", "Ndola", "Republic of Zambia"],
      "street": "82764 Off Trade Fair Road", "city": "Ndola", "country": "ZM"},
     {"region": "Middle East", "label": "Dubai office", "title": "Dubai, UAE",
-     "lines": ["Patriot Transport & Trading Limited", "Business Centre, Floor 3, Building A3", "Business Park, Dubai South", "Dubai, UAE"],
+     "lines": ["Patriot Transport & Trading Limited", "Business Centre, Floor 3", "Building A3", "Business Park, Dubai South", "Dubai, UAE"],
      "street": "Business Centre, Floor 3, Building A3, Business Park, Dubai South", "city": "Dubai", "country": "AE"},
 ]
 COUNTRIES = ["Zambia", "Democratic Republic of the Congo", "Republic of the Congo", "Tanzania", "Malawi",
@@ -317,7 +317,8 @@ def header(active):
 
 def footer():
     offices = "".join('<div><h2>%s</h2><address>%s<a href="mailto:%s">%s</a></address></div>'
-                      % (o["region"], "".join("<span>%s</span>" % l for l in o["lines"]), CONFIG["email"], CONFIG["email"])
+                      % (o["region"], "".join('<span%s>%s</span>' % (' class="org"' if i == 0 else "", escape(l)) for i, l in enumerate(o["lines"])),
+                         CONFIG["email"], CONFIG["email"])
                       for o in OFFICES)
     social = []
     if CONFIG["linkedin"]:
